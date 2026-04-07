@@ -700,7 +700,7 @@ export default function AdminApp() {
 
         <nav style={{ flex: 1, padding: '16px 12px' }}>
           {navItems.map(item => (
-            <button key={item.key} onClick={() => setPage(item.key)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: page === item.key ? '#4ade8015' : 'transparent', color: page === item.key ? '#ffffff' : '#a0a0a0', fontWeight: page === item.key ? 600 : 500, fontFamily: "'DM Mono',monospace", fontSize: 12, marginBottom: 2, textAlign: 'left' }}>
+            <button key={item.key} onClick={() => setPage(item.key)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: page === item.key ? '#4ade8015' : 'transparent', color: page === item.key ? '#ffffff' : '#cccccc', fontWeight: page === item.key ? 700 : 500, fontFamily: "'DM Mono',monospace", fontSize: 13, marginBottom: 2, textAlign: 'left' }}>
               <span style={{ fontSize: 16 }}>{item.icon}</span>
               {item.label}
             </button>
