@@ -547,8 +547,13 @@ function ContractsPage() {
     api.getContracts().then(setContracts).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const statusColor = { active: '#4ade80', expired: '#f87171', pending: '#fbbf24' };
-  const statusLabel = { active: 'AKTIF', expired: 'TAMAT', pending: 'PENDING' };
+  const statusStyle = {
+    active:     { bg: '#166534', color: '#4ade80' },
+    expired:    { bg: '#7f1d1d', color: '#f87171' },
+    pending:    { bg: '#713f12', color: '#fbbf24' },
+    terminated: { bg: '#1f2937', color: '#9ca3af' },
+  };
+  const statusLabel = { active: 'AKTIF', expired: 'TAMAT', pending: 'PENDING', terminated: 'TAMAT AWAL' };
 
   const isExpiringSoon = (endDate) => {
     if (!endDate) return false;
@@ -568,7 +573,7 @@ function ContractsPage() {
       ) : contracts.length === 0 ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
       ) : contracts.map(c => {
-        const color = statusColor[c.status] || '#888';
+        const ss = statusStyle[c.status] || { bg: '#1f2937', color: '#9ca3af' };
         const expiring = isExpiringSoon(c.end_date);
         return (
           <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: expiring ? '#fbbf2466' : '#2a2a2a' }}>
@@ -580,7 +585,7 @@ function ContractsPage() {
                 </div>
                 <div style={{ fontSize: 12, color: '#888' }}>{c.customer_name || c.customer?.name || '-'}</div>
               </div>
-              <span style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, letterSpacing: 1, background: color + '22', color, fontFamily: 'monospace' }}>
+              <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace' }}>
                 {statusLabel[c.status] || c.status?.toUpperCase()}
               </span>
             </div>
@@ -605,8 +610,14 @@ function CasesPage() {
     api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const statusColor = { open: '#60a5fa', in_progress: '#fbbf24', completed: '#4ade80', cancelled: '#888' };
+  const statusStyle = {
+    open:        { bg: '#1e3a5f', color: '#60a5fa' },
+    in_progress: { bg: '#713f12', color: '#fbbf24' },
+    completed:   { bg: '#166534', color: '#4ade80' },
+    cancelled:   { bg: '#1f2937', color: '#9ca3af' },
+  };
   const statusLabel = { open: 'BUKA', in_progress: 'DALAM PROSES', completed: 'SELESAI', cancelled: 'BATAL' };
+  const caseTypeLabel = { maintenance: 'PENYELENGGARAAN', repair: 'PEMBAIKAN', emergency: 'KECEMASAN', inspection: 'PEMERIKSAAN' };
 
   return (
     <div>
@@ -625,7 +636,7 @@ function CasesPage() {
       ) : cases.length === 0 ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
       ) : cases.map(c => {
-        const color = statusColor[c.status] || '#888';
+        const ss = statusStyle[c.status] || { bg: '#1f2937', color: '#9ca3af' };
         return (
           <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
@@ -634,13 +645,14 @@ function CasesPage() {
                   <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
                   <span style={{ fontSize: 14, color: '#e5e5e5' }}>{c.title}</span>
                 </div>
-                <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>{c.customer_name || c.customer?.name || '-'}</div>
-                <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
+                <div style={{ fontSize: 11, color: '#888', marginBottom: 6 }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                   {c.assigned_to && <span>👤 {c.assigned_to}</span>}
                   {c.scheduled_date && <span>📅 {fmtDate(c.scheduled_date)}</span>}
+                  {c.case_type && <span style={{ color: '#60a5fa' }}>{caseTypeLabel[c.case_type] || c.case_type.toUpperCase()}</span>}
                 </div>
               </div>
-              <span style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, letterSpacing: 1, background: color + '22', color, fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+              <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
                 {statusLabel[c.status] || c.status?.toUpperCase()}
               </span>
             </div>
