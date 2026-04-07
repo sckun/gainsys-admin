@@ -492,6 +492,165 @@ function EmployeesPage() {
   );
 }
 
+// ── Customers Page ────────────────────────────────────────────────────────
+function CustomersPage() {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    api.getCustomers().then(setCustomers).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
+        <div>
+          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Pelanggan</div>
+        </div>
+        <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
+          + Tambah Pelanggan
+        </button>
+      </div>
+
+      {loading ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
+      ) : customers.length === 0 ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
+      ) : customers.map(c => (
+        <Card key={c.id} style={{ marginBottom: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <Avatar name={c.name} size={44} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 14, color: '#e0e0e0', marginBottom: 4 }}>{c.name}</div>
+              <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
+              <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
+                <span>📞 {c.phone || '-'}</span>
+                <span>✉ {c.email || '-'}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+// ── Contracts Page ────────────────────────────────────────────────────────
+function ContractsPage() {
+  const [contracts, setContracts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    api.getContracts().then(setContracts).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const statusColor = { active: '#4ade80', expired: '#ef4444', pending: '#facc15' };
+  const statusLabel = { active: 'AKTIF', expired: 'TAMAT', pending: 'PENDING' };
+
+  const isExpiringSoon = (endDate) => {
+    if (!endDate) return false;
+    const diff = (new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24);
+    return diff > 0 && diff <= 60;
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Kontrak</div>
+      </div>
+
+      {loading ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
+      ) : contracts.length === 0 ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
+      ) : contracts.map(c => {
+        const color = statusColor[c.status] || '#888';
+        const expiring = isExpiringSoon(c.end_date);
+        return (
+          <Card key={c.id} style={{ marginBottom: 10, borderColor: expiring ? '#facc1544' : '#1e1e1e' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: 14, color: '#e0e0e0', fontFamily: 'monospace' }}>{c.contract_no}</span>
+                  {expiring && <span style={{ fontSize: 9, color: '#facc15', background: '#facc1520', padding: '2px 8px', borderRadius: 100, letterSpacing: 1 }}>⚠ HAMPIR TAMAT</span>}
+                </div>
+                <div style={{ fontSize: 12, color: '#888' }}>{c.customer_name || c.customer?.name || '-'}</div>
+              </div>
+              <span style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, letterSpacing: 1, background: color + '22', color, fontFamily: 'monospace' }}>
+                {statusLabel[c.status] || c.status?.toUpperCase()}
+              </span>
+            </div>
+            <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 20 }}>
+              <span>📅 {fmtDate(c.start_date)} – {fmtDate(c.end_date)}</span>
+              {c.amount != null && <span style={{ color: '#4ade80' }}>RM {parseFloat(c.amount).toFixed(2)}</span>}
+            </div>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Cases Page ────────────────────────────────────────────────────────────
+function CasesPage() {
+  const [cases, setCases] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const statusColor = { open: '#60a5fa', in_progress: '#facc15', completed: '#4ade80', cancelled: '#555' };
+  const statusLabel = { open: 'BUKA', in_progress: 'DALAM PROSES', completed: 'SELESAI', cancelled: 'BATAL' };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
+        <div>
+          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Kes Servis</div>
+        </div>
+        <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
+          + Tambah Kes
+        </button>
+      </div>
+
+      {loading ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
+      ) : cases.length === 0 ? (
+        <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
+      ) : cases.map(c => {
+        const color = statusColor[c.status] || '#888';
+        return (
+          <Card key={c.id} style={{ marginBottom: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                  <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
+                  <span style={{ fontSize: 14, color: '#e0e0e0' }}>{c.title}</span>
+                </div>
+                <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
+                  {c.assigned_to && <span>👤 {c.assigned_to}</span>}
+                  {c.scheduled_date && <span>📅 {fmtDate(c.scheduled_date)}</span>}
+                </div>
+              </div>
+              <span style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, letterSpacing: 1, background: color + '22', color, fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+                {statusLabel[c.status] || c.status?.toUpperCase()}
+              </span>
+            </div>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── Main App ──────────────────────────────────────────────────────────────
 export default function AdminApp() {
   const [user, setUser] = useState(api.getUser());
@@ -512,6 +671,9 @@ export default function AdminApp() {
     { key: 'report', label: 'Laporan', icon: '≡' },
     ...(canExport ? [{ key: 'payroll', label: 'Gaji', icon: '₿' }] : []),
     ...(canManage ? [{ key: 'employees', label: 'Pekerja', icon: '◎' }] : []),
+    { key: 'customers', label: 'Pelanggan', icon: '◈' },
+    { key: 'contracts', label: 'Kontrak', icon: '📋' },
+    { key: 'cases', label: 'Kes Servis', icon: '⚙' },
   ];
 
   return (
@@ -564,6 +726,9 @@ export default function AdminApp() {
         {page === 'report'     && <ReportPage />}
         {page === 'payroll'    && <PayrollPage />}
         {page === 'employees'  && <EmployeesPage />}
+        {page === 'customers'  && <CustomersPage />}
+        {page === 'contracts'  && <ContractsPage />}
+        {page === 'cases'      && <CasesPage />}
       </div>
     </div>
   );

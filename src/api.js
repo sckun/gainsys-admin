@@ -52,3 +52,8 @@ export const exportPayrollCSV = async (month) => {
 // Users
 export const getUsers = () => apiFetch('/users');
 export const createUser = (data) => apiFetch('/users', { method: 'POST', body: JSON.stringify(data) });
+
+// Service Management
+export const getCustomers = () => apiFetch('/customers');
+export const getContracts = () => apiFetch('/contracts');
+export const getCases = () => apiFetch('/cases');
