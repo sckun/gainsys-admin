@@ -699,6 +699,15 @@ function CasesPage() {
   const [adding, setAdding] = useState(false);
   const [msg, setMsg] = useState('');
 
+  // Detail view state
+  const [selectedCase, setSelectedCase] = useState(null);
+  const [caseDetail, setCaseDetail] = useState(null);
+  const [reports, setReports] = useState([]);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [newStatus, setNewStatus] = useState('');
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
   const load = () => { setLoading(true); api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => {
     load();
@@ -706,6 +715,15 @@ function CasesPage() {
     api.getUsers().then(all => setTechnicians(all.filter(u => u.role === 'technician'))).catch(() => {});
     api.getContracts().then(setContracts).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!selectedCase) { setCaseDetail(null); setReports([]); return; }
+    setDetailLoading(true);
+    Promise.all([api.getCaseById(selectedCase.id), api.getCaseReports(selectedCase.id)])
+      .then(([detail, reps]) => { setCaseDetail(detail); setReports(reps); setNewStatus(detail.status); })
+      .catch(() => {})
+      .finally(() => setDetailLoading(false));
+  }, [selectedCase]);
 
   const handleAdd = async () => {
     if (!form.title) return setMsg('Sila isi Tajuk kes.');
@@ -720,6 +738,28 @@ function CasesPage() {
     finally { setAdding(false); }
   };
 
+  const handleUpdateStatus = async () => {
+    if (!newStatus || newStatus === caseDetail.status) return;
+    setUpdating(true);
+    try {
+      const updated = await api.updateCase(selectedCase.id, { status: newStatus });
+      setCaseDetail(updated);
+      load();
+    } catch (err) { alert(err.message); }
+    finally { setUpdating(false); }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Padam kes "${caseDetail?.title}"? Tindakan ini tidak boleh dibatalkan.`)) return;
+    setDeleting(true);
+    try {
+      await api.deleteCase(selectedCase.id);
+      setSelectedCase(null);
+      load();
+    } catch (err) { alert(err.message); }
+    finally { setDeleting(false); }
+  };
+
   const inp = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2a', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'monospace', fontSize: 13, boxSizing: 'border-box', outline: 'none' };
 
   const statusStyle = {
@@ -730,7 +770,148 @@ function CasesPage() {
   };
   const statusLabel = { open: 'BUKA', in_progress: 'DALAM PROSES', completed: 'SELESAI', cancelled: 'BATAL' };
   const caseTypeLabel = { maintenance: 'PENYELENGGARAAN', repair: 'PEMBAIKAN', emergency: 'KECEMASAN', inspection: 'PEMERIKSAAN' };
+  const priorityStyle = { low: { color: '#888' }, normal: { color: '#60a5fa' }, high: { color: '#fbbf24' }, urgent: { color: '#f87171' } };
+  const priorityLabel = { low: 'RENDAH', normal: 'NORMAL', high: 'TINGGI', urgent: 'URGENT' };
+  const isUuid = (s) => typeof s === 'string' && s.length === 36 && s[8] === '-';
 
+  // ── Detail View ──────────────────────────────────────────────────────────
+  if (selectedCase) {
+    const d = caseDetail;
+    const ss = d ? (statusStyle[d.status] || { bg: '#1f2937', color: '#9ca3af' }) : null;
+    const ps = d ? (priorityStyle[d.priority] || { color: '#888' }) : null;
+
+    return (
+      <div>
+        <button onClick={() => setSelectedCase(null)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1px solid #2a2a2a', background: 'transparent', color: '#888', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer', marginBottom: 24 }}>
+          ← Kembali
+        </button>
+
+        {detailLoading ? (
+          <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
+        ) : !d ? (
+          <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
+        ) : (
+          <>
+            {/* Header */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>KES SERVIS</div>
+              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, color: '#ffffff', marginBottom: 10 }}>{d.title}</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace' }}>
+                  {statusLabel[d.status] || d.status?.toUpperCase()}
+                </span>
+                {d.case_type && (
+                  <span style={{ fontSize: 9, color: '#60a5fa', background: '#1e3a5f', padding: '3px 10px', borderRadius: 4, letterSpacing: 1, fontFamily: 'monospace' }}>
+                    {caseTypeLabel[d.case_type] || d.case_type.toUpperCase()}
+                  </span>
+                )}
+                {d.priority && (
+                  <span style={{ fontSize: 9, color: ps.color, background: ps.color + '20', padding: '3px 10px', borderRadius: 4, letterSpacing: 1, fontFamily: 'monospace' }}>
+                    {priorityLabel[d.priority] || d.priority.toUpperCase()}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Basic Info */}
+            <SectionTitle>Maklumat Kes</SectionTitle>
+            <Card style={{ marginBottom: 20, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                {[
+                  ['No. Kes', d.case_no],
+                  ['Pelanggan', d.customer_name || d.customer?.name || '-'],
+                  ['Lokasi', d.location || '-'],
+                  ['No. Kontrak', d.contract_no || d.contract?.contract_no || '-'],
+                  ['Teknisyen', d.assigned_to_name || (isUuid(d.assigned_to) ? d.assigned_to?.slice(0, 8) + '…' : d.assigned_to) || '-'],
+                  ['Tarikh Dijadual', d.scheduled_date ? fmtDate(d.scheduled_date) : '-'],
+                  ['Dicipta', d.created_at ? fmtDate(d.created_at) : '-'],
+                  ['Dikemaskini', d.updated_at ? fmtDate(d.updated_at) : '-'],
+                ].map(([label, val]) => (
+                  <div key={label}>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>{label.toUpperCase()}</div>
+                    <div style={{ fontSize: 13, color: '#e5e5e5', fontFamily: 'monospace' }}>{val}</div>
+                  </div>
+                ))}
+              </div>
+              {d.problem_desc && (
+                <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
+                  <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 6 }}>PENERANGAN MASALAH</div>
+                  <div style={{ fontSize: 13, color: '#888', lineHeight: 1.7 }}>{d.problem_desc}</div>
+                </div>
+              )}
+            </Card>
+
+            {/* Reports */}
+            <SectionTitle>Laporan Kerja ({reports.length})</SectionTitle>
+            {reports.length === 0 ? (
+              <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 24, marginBottom: 20 }}>Tiada laporan kerja.</div>
+            ) : reports.map((r, i) => (
+              <Card key={r.id || i} style={{ marginBottom: 12, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: r.work_done ? 12 : 0 }}>
+                  <div>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>TIBA</div>
+                    <div style={{ fontSize: 12, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.arrived_at ? fmt12(r.arrived_at) : '-'}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>SELESAI</div>
+                    <div style={{ fontSize: 12, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.completed_at ? fmt12(r.completed_at) : '-'}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>TANDATANGAN PELANGGAN</div>
+                    <div style={{ fontSize: 12, fontFamily: 'monospace', color: r.customer_signed ? '#4ade80' : '#ef4444' }}>{r.customer_signed ? '✓ Ya' : '✗ Belum'}</div>
+                  </div>
+                </div>
+                {r.work_done && (
+                  <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a', marginBottom: r.parts?.length ? 12 : 0 }}>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 6 }}>KERJA DILAKUKAN</div>
+                    <div style={{ fontSize: 12, color: '#888', lineHeight: 1.7 }}>{r.work_done}</div>
+                  </div>
+                )}
+                {r.parts?.length > 0 && (
+                  <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a' }}>
+                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>ALAT GANTI</div>
+                    {r.parts.map((p, j) => (
+                      <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontFamily: 'monospace', color: '#888', marginBottom: 4 }}>
+                        <span>{p.part_name}</span>
+                        <span>{p.quantity}× <span style={{ color: '#4ade80' }}>RM {parseFloat(p.unit_cost || 0).toFixed(2)}</span></span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            ))}
+
+            {/* Actions */}
+            <SectionTitle>Tindakan</SectionTitle>
+            <Card style={{ background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>TUKAR STATUS</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ ...inp, flex: 1 }}>
+                    <option value="open">Buka</option>
+                    <option value="in_progress">Dalam Proses</option>
+                    <option value="completed">Selesai</option>
+                    <option value="cancelled">Batal</option>
+                  </select>
+                  <button onClick={handleUpdateStatus} disabled={updating || newStatus === d.status} style={{ padding: '12px 20px', borderRadius: 10, border: 'none', background: newStatus === d.status ? '#1a1a1a' : '#4ade80', color: newStatus === d.status ? '#555' : '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: newStatus === d.status ? 'default' : 'pointer' }}>
+                    {updating ? 'Menyimpan...' : 'Kemaskini'}
+                  </button>
+                </div>
+              </div>
+              <div style={{ paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
+                <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>ZON BAHAYA</div>
+                <button onClick={handleDelete} disabled={deleting} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid #7f1d1d', background: 'transparent', color: '#f87171', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>
+                  {deleting ? 'Memadamkan...' : '✕ Padam Kes'}
+                </button>
+              </div>
+            </Card>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // ── List View ─────────────────────────────────────────────────────────────
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
@@ -791,10 +972,9 @@ function CasesPage() {
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
       ) : cases.map(c => {
         const ss = statusStyle[c.status] || { bg: '#1f2937', color: '#9ca3af' };
-        const isUuid = (s) => typeof s === 'string' && s.length === 36 && s[8] === '-';
         const assignedLabel = c.assigned_to_name || (isUuid(c.assigned_to) ? c.assigned_to.slice(0, 8) + '…' : c.assigned_to);
         return (
-          <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+          <Card key={c.id} onClick={() => setSelectedCase(c)} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a', cursor: 'pointer' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>

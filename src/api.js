@@ -60,3 +60,7 @@ export const getCases = () => apiFetch('/cases');
 export const createCustomer = (data) => apiFetch('/customers', { method: 'POST', body: JSON.stringify(data) });
 export const createContract = (data) => apiFetch('/contracts', { method: 'POST', body: JSON.stringify(data) });
 export const createCase = (data) => apiFetch('/cases', { method: 'POST', body: JSON.stringify(data) });
+export const getCaseById = (id) => apiFetch(`/cases/${id}`);
+export const getCaseReports = (id) => apiFetch(`/cases/${id}/reports`);
+export const updateCase = (id, data) => apiFetch(`/cases/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+export const deleteCase = (id) => apiFetch(`/cases/${id}`, { method: 'DELETE' });
