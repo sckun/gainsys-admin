@@ -95,7 +95,7 @@ function DashboardPage({ user }) {
   return (
     <div>
       <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>RINGKASAN</div>
+        <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>RINGKASAN</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>
           Selamat datang, <span style={{ color: '#4ade80' }}>{user.name}</span>
         </div>
@@ -131,8 +131,8 @@ function DashboardPage({ user }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={emp.name} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{emp.name}</div>
-              <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 12 }}>
+              <div style={{ fontSize: 17, color: '#ffffff', fontWeight: 700, marginBottom: 4 }}>{emp.name}</div>
+              <div style={{ fontSize: 14, color: '#cccccc', display: 'flex', gap: 12 }}>
                 <span>IN: <span style={{ color: emp.is_late ? '#ef4444' : '#4ade80' }}>{fmt12(emp.clock_in)}</span></span>
                 <span>OUT: <span style={{ color: '#aaaaaa' }}>{fmt12(emp.clock_out)}</span></span>
                 {emp.clock_in_addr && <span>📍 {emp.clock_in_addr}</span>}
@@ -189,7 +189,7 @@ function ApprovalsPage() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>PENGURUSAN</div>
+        <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>PENGURUSAN</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28 }}>Kelulusan</div>
       </div>
 
@@ -210,14 +210,14 @@ function ApprovalsPage() {
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                 <Avatar name={req.employee_name} size={40} />
                 <div>
-                  <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{req.employee_name}</div>
-                  <div style={{ fontSize: 12, color: '#888888', marginTop: 2 }}>Cuti {leaveTypeLabel[req.leave_type]} · {req.days} hari</div>
+                  <div style={{ fontSize: 17, color: '#ffffff', fontWeight: 700 }}>{req.employee_name}</div>
+                  <div style={{ fontSize: 14, color: '#cccccc', marginTop: 2 }}>Cuti {leaveTypeLabel[req.leave_type]} · {req.days} hari</div>
                 </div>
               </div>
               <Badge status="pending" />
             </div>
-            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>📅 {fmtDate(req.start_date)} – {fmtDate(req.end_date)}</div>
-            {req.reason && <div style={{ fontSize: 12, color: '#888888', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
+            <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 4 }}>📅 {fmtDate(req.start_date)} – {fmtDate(req.end_date)}</div>
+            {req.reason && <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => handleLeave(req.id, 'approve')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#166534', color: '#4ade80', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✓ Luluskan</button>
               <button onClick={() => handleLeave(req.id, 'reject')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#2a0000', color: '#ef4444', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✗ Tolak</button>
@@ -233,15 +233,15 @@ function ApprovalsPage() {
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                 <Avatar name={req.employee_name} size={40} />
                 <div>
-                  <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{req.employee_name}</div>
+                  <div style={{ fontSize: 17, color: '#ffffff', fontWeight: 700 }}>{req.employee_name}</div>
                   <div style={{ fontSize: 12, color: '#facc15', marginTop: 2 }}>{req.hours}j · {req.rate}×</div>
                 </div>
               </div>
               <Badge status="pending" />
             </div>
-            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>📅 {fmtDate(req.date)}</div>
-            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>⏱ {fmt12(req.start_time)} – {fmt12(req.end_time)}</div>
-            {req.reason && <div style={{ fontSize: 12, color: '#888888', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
+            <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 4 }}>📅 {fmtDate(req.date)}</div>
+            <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 4 }}>⏱ {fmt12(req.start_time)} – {fmt12(req.end_time)}</div>
+            {req.reason && <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => handleOT(req.id, 'approve')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#1a1200', color: '#facc15', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✓ Luluskan</button>
               <button onClick={() => handleOT(req.id, 'reject')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#2a0000', color: '#ef4444', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✗ Tolak</button>
@@ -267,7 +267,7 @@ function ReportPage() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>LAPORAN</div>
+        <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>LAPORAN</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28 }}>Kehadiran Bulanan</div>
       </div>
 
@@ -346,7 +346,7 @@ function PayrollPage() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SQL PAYROLL</div>
+        <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>SQL PAYROLL</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28 }}>Export Gaji</div>
       </div>
 
@@ -435,7 +435,7 @@ function EmployeesPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
-          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>PENGURUSAN</div>
+          <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>PENGURUSAN</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28 }}>Pekerja</div>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
@@ -478,9 +478,9 @@ function EmployeesPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={u.name} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{u.name}</div>
-              <div style={{ fontSize: 12, color: '#888888' }}>{u.email}</div>
-              <div style={{ fontSize: 12, color: '#888888', marginTop: 2 }}>📞 {u.phone || '-'} · ⏰ {shiftLabel[u.shift_type]}</div>
+              <div style={{ fontSize: 17, color: '#ffffff', fontWeight: 700, marginBottom: 4 }}>{u.name}</div>
+              <div style={{ fontSize: 14, color: '#cccccc' }}>{u.email}</div>
+              <div style={{ fontSize: 14, color: '#cccccc', marginTop: 2 }}>📞 {u.phone || '-'} · ⏰ {shiftLabel[u.shift_type]}</div>
             </div>
             <span style={{ padding: '4px 12px', borderRadius: 100, fontSize: 10, background: '#1e1e1e', color: '#aaaaaa', fontFamily: 'monospace' }}>
               {roleLabel[u.role]}
@@ -523,7 +523,7 @@ function CustomersPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
-          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>SERVIS</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Pelanggan</div>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
@@ -559,9 +559,9 @@ function CustomersPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={c.name} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
-              <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
-              <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 16 }}>
+              <div style={{ fontSize: 17, color: '#ffffff', fontWeight: 700, marginBottom: 4 }}>{c.name}</div>
+              <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
+              <div style={{ fontSize: 14, color: '#cccccc', display: 'flex', gap: 16 }}>
                 <span>📞 {c.phone || '-'}</span>
                 <span>✉ {c.email || '-'}</span>
               </div>
@@ -622,7 +622,7 @@ function ContractsPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
-          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>SERVIS</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kontrak</div>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
@@ -667,16 +667,16 @@ function ContractsPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, fontFamily: 'monospace' }}>{c.contract_no}</span>
+                  <span style={{ fontSize: 17, color: '#ffffff', fontWeight: 700, fontFamily: 'monospace' }}>{c.contract_no}</span>
                   {expiring && <span style={{ fontSize: 9, color: '#fbbf24', background: '#fbbf2420', padding: '2px 8px', borderRadius: 100, letterSpacing: 1 }}>⚠ HAMPIR TAMAT</span>}
                 </div>
-                <div style={{ fontSize: 12, color: '#aaaaaa' }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 14, color: '#cccccc' }}>{c.customer_name || c.customer?.name || '-'}</div>
               </div>
               <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace' }}>
                 {statusLabel[c.status] || c.status?.toUpperCase()}
               </span>
             </div>
-            <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 20 }}>
+            <div style={{ fontSize: 14, color: '#cccccc', display: 'flex', gap: 20 }}>
               <span>📅 {fmtDate(c.start_date)} – {fmtDate(c.end_date)}</span>
               {c.amount != null && <span style={{ color: '#4ade80' }}>RM {parseFloat(c.amount).toFixed(2)}</span>}
             </div>
@@ -794,7 +794,7 @@ function CasesPage() {
           <>
             {/* Header */}
             <div style={{ marginBottom: 24 }}>
-              <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>KES SERVIS</div>
+              <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>KES SERVIS</div>
               <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, color: '#ffffff', marginBottom: 10 }}>{d.title}</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                 <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace' }}>
@@ -828,14 +828,14 @@ function CasesPage() {
                   ['Dikemaskini', d.updated_at ? fmtDate(d.updated_at) : '-'],
                 ].map(([label, val]) => (
                   <div key={label}>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>{label.toUpperCase()}</div>
-                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{val}</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 4 }}>{label.toUpperCase()}</div>
+                    <div style={{ fontSize: 16, color: '#ffffff', fontFamily: 'monospace' }}>{val}</div>
                   </div>
                 ))}
               </div>
               {d.problem_desc && (
                 <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
-                  <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 6 }}>PENERANGAN MASALAH</div>
+                  <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 6 }}>PENERANGAN MASALAH</div>
                   <div style={{ fontSize: 14, color: '#aaaaaa', lineHeight: 1.7 }}>{d.problem_desc}</div>
                 </div>
               )}
@@ -849,27 +849,27 @@ function CasesPage() {
               <Card key={r.id || i} style={{ marginBottom: 12, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: r.work_done ? 12 : 0 }}>
                   <div>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>TIBA</div>
-                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.arrived_at ? fmt12(r.arrived_at) : '-'}</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 4 }}>TIBA</div>
+                    <div style={{ fontSize: 16, color: '#ffffff', fontFamily: 'monospace' }}>{r.arrived_at ? fmt12(r.arrived_at) : '-'}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>SELESAI</div>
-                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.completed_at ? fmt12(r.completed_at) : '-'}</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 4 }}>SELESAI</div>
+                    <div style={{ fontSize: 16, color: '#ffffff', fontFamily: 'monospace' }}>{r.completed_at ? fmt12(r.completed_at) : '-'}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>TANDATANGAN PELANGGAN</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 4 }}>TANDATANGAN PELANGGAN</div>
                     <div style={{ fontSize: 14, fontFamily: 'monospace', color: r.customer_signed ? '#4ade80' : '#ef4444' }}>{r.customer_signed ? '✓ Ya' : '✗ Belum'}</div>
                   </div>
                 </div>
                 {r.work_done && (
                   <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a', marginBottom: r.parts?.length ? 12 : 0 }}>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 6 }}>KERJA DILAKUKAN</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 6 }}>KERJA DILAKUKAN</div>
                     <div style={{ fontSize: 14, color: '#aaaaaa', lineHeight: 1.7 }}>{r.work_done}</div>
                   </div>
                 )}
                 {r.parts?.length > 0 && (
                   <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a' }}>
-                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>ALAT GANTI</div>
+                    <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 8 }}>ALAT GANTI</div>
                     {r.parts.map((p, j) => (
                       <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontFamily: 'monospace', color: '#aaaaaa', marginBottom: 4 }}>
                         <span>{p.part_name}</span>
@@ -885,7 +885,7 @@ function CasesPage() {
             <SectionTitle>Tindakan</SectionTitle>
             <Card style={{ background: '#1a1a1a', borderColor: '#2a2a2a' }}>
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>TUKAR STATUS</div>
+                <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 8 }}>TUKAR STATUS</div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ ...inp, flex: 1 }}>
                     <option value="open">Buka</option>
@@ -899,7 +899,7 @@ function CasesPage() {
                 </div>
               </div>
               <div style={{ paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
-                <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>ZON BAHAYA</div>
+                <div style={{ fontSize: 11, color: '#999999', letterSpacing: 2, marginBottom: 8 }}>ZON BAHAYA</div>
                 <button onClick={handleDelete} disabled={deleting} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid #7f1d1d', background: 'transparent', color: '#f87171', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>
                   {deleting ? 'Memadamkan...' : '✕ Padam Kes'}
                 </button>
@@ -916,7 +916,7 @@ function CasesPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
-          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontSize: 11, color: '#555', letterSpacing: 4, marginBottom: 4 }}>SERVIS</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kes Servis</div>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
@@ -979,9 +979,9 @@ function CasesPage() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
-                  <span style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{c.title}</span>
+                  <span style={{ fontSize: 17, color: '#ffffff', fontWeight: 700 }}>{c.title}</span>
                 </div>
-                <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 8 }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 14, color: '#cccccc', marginBottom: 8 }}>{c.customer_name || c.customer?.name || '-'}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                   {c.case_type && (
                     <span style={{ fontSize: 9, color: '#60a5fa', background: '#1e3a5f', padding: '2px 8px', borderRadius: 4, letterSpacing: 1, fontFamily: 'monospace' }}>
@@ -989,10 +989,10 @@ function CasesPage() {
                     </span>
                   )}
                   {assignedLabel && (
-                    <span style={{ fontSize: 12, color: '#aaaaaa', fontFamily: 'monospace' }}>👤 {assignedLabel}</span>
+                    <span style={{ fontSize: 14, color: '#cccccc', fontFamily: 'monospace' }}>👤 {assignedLabel}</span>
                   )}
                   {c.scheduled_date && (
-                    <span style={{ fontSize: 12, color: '#888888', fontFamily: 'monospace' }}>📅 {fmtDate(c.scheduled_date)}</span>
+                    <span style={{ fontSize: 14, color: '#cccccc', fontFamily: 'monospace' }}>📅 {fmtDate(c.scheduled_date)}</span>
                   )}
                 </div>
               </div>
@@ -1033,7 +1033,7 @@ export default function AdminApp() {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a', color: '#e0e0e0', fontFamily: "'DM Mono',monospace" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a', color: '#e0e0e0', fontFamily: "'DM Mono',monospace", fontSize: 15 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1056,7 +1056,7 @@ export default function AdminApp() {
 
         <nav style={{ flex: 1, padding: '16px 12px' }}>
           {navItems.map(item => (
-            <button key={item.key} onClick={() => setPage(item.key)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: page === item.key ? '#4ade8015' : 'transparent', color: page === item.key ? '#ffffff' : '#cccccc', fontWeight: page === item.key ? 700 : 500, fontFamily: "'DM Mono',monospace", fontSize: 13, marginBottom: 2, textAlign: 'left' }}>
+            <button key={item.key} onClick={() => setPage(item.key)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: page === item.key ? '#4ade8015' : 'transparent', color: page === item.key ? '#ffffff' : '#cccccc', fontWeight: page === item.key ? 700 : 500, fontFamily: "'DM Mono',monospace", fontSize: 14, marginBottom: 2, textAlign: 'left' }}>
               <span style={{ fontSize: 16 }}>{item.icon}</span>
               {item.label}
             </button>
