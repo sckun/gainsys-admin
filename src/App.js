@@ -13,8 +13,8 @@ const Badge = ({ status }) => {
   return <span style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, letterSpacing: 1, background: color + '22', color, fontFamily: 'monospace' }}>{label}</span>;
 };
 
-const Card = ({ children, style }) => (
-  <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: '18px', ...style }}>{children}</div>
+const Card = ({ children, style, onClick }) => (
+  <div onClick={onClick} style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: '18px', ...style }}>{children}</div>
 );
 
 const SectionTitle = ({ children }) => (
