@@ -131,10 +131,10 @@ function DashboardPage({ user }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={emp.name} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#e0e0e0', marginBottom: 4 }}>{emp.name}</div>
-              <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 12 }}>
+              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{emp.name}</div>
+              <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 12 }}>
                 <span>IN: <span style={{ color: emp.is_late ? '#ef4444' : '#4ade80' }}>{fmt12(emp.clock_in)}</span></span>
-                <span>OUT: <span style={{ color: '#888' }}>{fmt12(emp.clock_out)}</span></span>
+                <span>OUT: <span style={{ color: '#aaaaaa' }}>{fmt12(emp.clock_out)}</span></span>
                 {emp.clock_in_addr && <span>📍 {emp.clock_in_addr}</span>}
               </div>
               {emp.is_late && <div style={{ fontSize: 9, color: '#ef4444', marginTop: 2 }}>LAMBAT {emp.late_minutes} MINIT</div>}
@@ -210,14 +210,14 @@ function ApprovalsPage() {
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                 <Avatar name={req.employee_name} size={40} />
                 <div>
-                  <div style={{ fontSize: 14, color: '#e0e0e0' }}>{req.employee_name}</div>
-                  <div style={{ fontSize: 10, color: '#555', marginTop: 2 }}>Cuti {leaveTypeLabel[req.leave_type]} · {req.days} hari</div>
+                  <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{req.employee_name}</div>
+                  <div style={{ fontSize: 12, color: '#888888', marginTop: 2 }}>Cuti {leaveTypeLabel[req.leave_type]} · {req.days} hari</div>
                 </div>
               </div>
               <Badge status="pending" />
             </div>
-            <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>📅 {fmtDate(req.start_date)} – {fmtDate(req.end_date)}</div>
-            {req.reason && <div style={{ fontSize: 11, color: '#666', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
+            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>📅 {fmtDate(req.start_date)} – {fmtDate(req.end_date)}</div>
+            {req.reason && <div style={{ fontSize: 12, color: '#888888', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => handleLeave(req.id, 'approve')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#166534', color: '#4ade80', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✓ Luluskan</button>
               <button onClick={() => handleLeave(req.id, 'reject')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#2a0000', color: '#ef4444', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✗ Tolak</button>
@@ -233,15 +233,15 @@ function ApprovalsPage() {
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                 <Avatar name={req.employee_name} size={40} />
                 <div>
-                  <div style={{ fontSize: 14, color: '#e0e0e0' }}>{req.employee_name}</div>
-                  <div style={{ fontSize: 10, color: '#facc15', marginTop: 2 }}>{req.hours}j · {req.rate}×</div>
+                  <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{req.employee_name}</div>
+                  <div style={{ fontSize: 12, color: '#facc15', marginTop: 2 }}>{req.hours}j · {req.rate}×</div>
                 </div>
               </div>
               <Badge status="pending" />
             </div>
-            <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>📅 {fmtDate(req.date)}</div>
-            <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>⏱ {fmt12(req.start_time)} – {fmt12(req.end_time)}</div>
-            {req.reason && <div style={{ fontSize: 11, color: '#666', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
+            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>📅 {fmtDate(req.date)}</div>
+            <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 4 }}>⏱ {fmt12(req.start_time)} – {fmt12(req.end_time)}</div>
+            {req.reason && <div style={{ fontSize: 12, color: '#888888', marginBottom: 14, fontStyle: 'italic' }}>"{req.reason}"</div>}
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => handleOT(req.id, 'approve')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#1a1200', color: '#facc15', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✓ Luluskan</button>
               <button onClick={() => handleOT(req.id, 'reject')} style={{ flex: 1, padding: '10px', borderRadius: 8, border: 'none', background: '#2a0000', color: '#ef4444', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>✗ Tolak</button>
@@ -279,21 +279,21 @@ function ReportPage() {
       ) : (
         <>
           <div style={{ overflowX: 'auto', marginBottom: 28 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'monospace', fontSize: 12, minWidth: 600 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'monospace', fontSize: 14, minWidth: 600 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #2a2a2a' }}>
                   {['NAMA', 'HADIR', 'LAMBAT', 'ABSENT', 'CUTI', 'OT (jam)'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', color: '#555', letterSpacing: 1, textAlign: h === 'NAMA' ? 'left' : 'center', fontWeight: 400 }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 12px', color: '#888888', letterSpacing: 1, textAlign: h === 'NAMA' ? 'left' : 'center', fontWeight: 400 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {data.map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid #1a1a1a' }}>
-                    <td style={{ padding: '14px 12px', color: '#e0e0e0' }}>{row.name}</td>
+                    <td style={{ padding: '14px 12px', color: '#ffffff', fontWeight: 600 }}>{row.name}</td>
                     <td style={{ padding: '14px 12px', textAlign: 'center', color: '#4ade80' }}>{row.present_days || 0}</td>
-                    <td style={{ padding: '14px 12px', textAlign: 'center', color: row.late_days > 0 ? '#facc15' : '#555' }}>{row.late_days || 0}</td>
-                    <td style={{ padding: '14px 12px', textAlign: 'center', color: row.absent_days > 0 ? '#ef4444' : '#555' }}>{row.absent_days || 0}</td>
+                    <td style={{ padding: '14px 12px', textAlign: 'center', color: row.late_days > 0 ? '#facc15' : '#888888' }}>{row.late_days || 0}</td>
+                    <td style={{ padding: '14px 12px', textAlign: 'center', color: row.absent_days > 0 ? '#ef4444' : '#888888' }}>{row.absent_days || 0}</td>
                     <td style={{ padding: '14px 12px', textAlign: 'center', color: '#60a5fa' }}>{row.leave_days || 0}</td>
                     <td style={{ padding: '14px 12px', textAlign: 'center', color: '#facc15' }}>{parseFloat(row.ot_hours || 0).toFixed(1)}</td>
                   </tr>
@@ -478,11 +478,11 @@ function EmployeesPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={u.name} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#e0e0e0', marginBottom: 4 }}>{u.name}</div>
-              <div style={{ fontSize: 10, color: '#555' }}>{u.email}</div>
-              <div style={{ fontSize: 10, color: '#555', marginTop: 2 }}>📞 {u.phone || '-'} · ⏰ {shiftLabel[u.shift_type]}</div>
+              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{u.name}</div>
+              <div style={{ fontSize: 12, color: '#888888' }}>{u.email}</div>
+              <div style={{ fontSize: 12, color: '#888888', marginTop: 2 }}>📞 {u.phone || '-'} · ⏰ {shiftLabel[u.shift_type]}</div>
             </div>
-            <span style={{ padding: '4px 12px', borderRadius: 100, fontSize: 10, background: '#1e1e1e', color: '#888', fontFamily: 'monospace' }}>
+            <span style={{ padding: '4px 12px', borderRadius: 100, fontSize: 10, background: '#1e1e1e', color: '#aaaaaa', fontFamily: 'monospace' }}>
               {roleLabel[u.role]}
             </span>
           </div>
@@ -559,9 +559,9 @@ function CustomersPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={c.name} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#e5e5e5', marginBottom: 4 }}>{c.name}</div>
-              <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
-              <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
+              <div style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, marginBottom: 4 }}>{c.name}</div>
+              <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
+              <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 16 }}>
                 <span>📞 {c.phone || '-'}</span>
                 <span>✉ {c.email || '-'}</span>
               </div>
@@ -667,16 +667,16 @@ function ContractsPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{c.contract_no}</span>
+                  <span style={{ fontSize: 14, color: '#ffffff', fontWeight: 600, fontFamily: 'monospace' }}>{c.contract_no}</span>
                   {expiring && <span style={{ fontSize: 9, color: '#fbbf24', background: '#fbbf2420', padding: '2px 8px', borderRadius: 100, letterSpacing: 1 }}>⚠ HAMPIR TAMAT</span>}
                 </div>
-                <div style={{ fontSize: 12, color: '#888' }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 12, color: '#aaaaaa' }}>{c.customer_name || c.customer?.name || '-'}</div>
               </div>
               <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace' }}>
                 {statusLabel[c.status] || c.status?.toUpperCase()}
               </span>
             </div>
-            <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 20 }}>
+            <div style={{ fontSize: 12, color: '#888888', display: 'flex', gap: 20 }}>
               <span>📅 {fmtDate(c.start_date)} – {fmtDate(c.end_date)}</span>
               {c.amount != null && <span style={{ color: '#4ade80' }}>RM {parseFloat(c.amount).toFixed(2)}</span>}
             </div>
@@ -828,15 +828,15 @@ function CasesPage() {
                   ['Dikemaskini', d.updated_at ? fmtDate(d.updated_at) : '-'],
                 ].map(([label, val]) => (
                   <div key={label}>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>{label.toUpperCase()}</div>
-                    <div style={{ fontSize: 13, color: '#e5e5e5', fontFamily: 'monospace' }}>{val}</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>{label.toUpperCase()}</div>
+                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{val}</div>
                   </div>
                 ))}
               </div>
               {d.problem_desc && (
                 <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
-                  <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 6 }}>PENERANGAN MASALAH</div>
-                  <div style={{ fontSize: 13, color: '#888', lineHeight: 1.7 }}>{d.problem_desc}</div>
+                  <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 6 }}>PENERANGAN MASALAH</div>
+                  <div style={{ fontSize: 14, color: '#aaaaaa', lineHeight: 1.7 }}>{d.problem_desc}</div>
                 </div>
               )}
             </Card>
@@ -849,29 +849,29 @@ function CasesPage() {
               <Card key={r.id || i} style={{ marginBottom: 12, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: r.work_done ? 12 : 0 }}>
                   <div>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>TIBA</div>
-                    <div style={{ fontSize: 12, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.arrived_at ? fmt12(r.arrived_at) : '-'}</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>TIBA</div>
+                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.arrived_at ? fmt12(r.arrived_at) : '-'}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>SELESAI</div>
-                    <div style={{ fontSize: 12, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.completed_at ? fmt12(r.completed_at) : '-'}</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>SELESAI</div>
+                    <div style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{r.completed_at ? fmt12(r.completed_at) : '-'}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 4 }}>TANDATANGAN PELANGGAN</div>
-                    <div style={{ fontSize: 12, fontFamily: 'monospace', color: r.customer_signed ? '#4ade80' : '#ef4444' }}>{r.customer_signed ? '✓ Ya' : '✗ Belum'}</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 4 }}>TANDATANGAN PELANGGAN</div>
+                    <div style={{ fontSize: 14, fontFamily: 'monospace', color: r.customer_signed ? '#4ade80' : '#ef4444' }}>{r.customer_signed ? '✓ Ya' : '✗ Belum'}</div>
                   </div>
                 </div>
                 {r.work_done && (
                   <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a', marginBottom: r.parts?.length ? 12 : 0 }}>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 6 }}>KERJA DILAKUKAN</div>
-                    <div style={{ fontSize: 12, color: '#888', lineHeight: 1.7 }}>{r.work_done}</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 6 }}>KERJA DILAKUKAN</div>
+                    <div style={{ fontSize: 14, color: '#aaaaaa', lineHeight: 1.7 }}>{r.work_done}</div>
                   </div>
                 )}
                 {r.parts?.length > 0 && (
                   <div style={{ paddingTop: 12, borderTop: '1px solid #2a2a2a' }}>
-                    <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>ALAT GANTI</div>
+                    <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>ALAT GANTI</div>
                     {r.parts.map((p, j) => (
-                      <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontFamily: 'monospace', color: '#888', marginBottom: 4 }}>
+                      <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontFamily: 'monospace', color: '#aaaaaa', marginBottom: 4 }}>
                         <span>{p.part_name}</span>
                         <span>{p.quantity}× <span style={{ color: '#4ade80' }}>RM {parseFloat(p.unit_cost || 0).toFixed(2)}</span></span>
                       </div>
@@ -885,7 +885,7 @@ function CasesPage() {
             <SectionTitle>Tindakan</SectionTitle>
             <Card style={{ background: '#1a1a1a', borderColor: '#2a2a2a' }}>
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>TUKAR STATUS</div>
+                <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>TUKAR STATUS</div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ ...inp, flex: 1 }}>
                     <option value="open">Buka</option>
@@ -899,7 +899,7 @@ function CasesPage() {
                 </div>
               </div>
               <div style={{ paddingTop: 16, borderTop: '1px solid #2a2a2a' }}>
-                <div style={{ fontSize: 9, color: '#555', letterSpacing: 2, marginBottom: 8 }}>ZON BAHAYA</div>
+                <div style={{ fontSize: 9, color: '#888888', letterSpacing: 2, marginBottom: 8 }}>ZON BAHAYA</div>
                 <button onClick={handleDelete} disabled={deleting} style={{ padding: '10px 20px', borderRadius: 10, border: '1px solid #7f1d1d', background: 'transparent', color: '#f87171', fontFamily: 'monospace', fontSize: 12, cursor: 'pointer' }}>
                   {deleting ? 'Memadamkan...' : '✕ Padam Kes'}
                 </button>
@@ -979,9 +979,9 @@ function CasesPage() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
-                  <span style={{ fontSize: 14, color: '#e5e5e5' }}>{c.title}</span>
+                  <span style={{ fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{c.title}</span>
                 </div>
-                <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ fontSize: 12, color: '#aaaaaa', marginBottom: 8 }}>{c.customer_name || c.customer?.name || '-'}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                   {c.case_type && (
                     <span style={{ fontSize: 9, color: '#60a5fa', background: '#1e3a5f', padding: '2px 8px', borderRadius: 4, letterSpacing: 1, fontFamily: 'monospace' }}>
@@ -989,10 +989,10 @@ function CasesPage() {
                     </span>
                   )}
                   {assignedLabel && (
-                    <span style={{ fontSize: 10, color: '#888', fontFamily: 'monospace' }}>👤 {assignedLabel}</span>
+                    <span style={{ fontSize: 12, color: '#aaaaaa', fontFamily: 'monospace' }}>👤 {assignedLabel}</span>
                   )}
                   {c.scheduled_date && (
-                    <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>📅 {fmtDate(c.scheduled_date)}</span>
+                    <span style={{ fontSize: 12, color: '#888888', fontFamily: 'monospace' }}>📅 {fmtDate(c.scheduled_date)}</span>
                   )}
                 </div>
               </div>
