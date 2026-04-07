@@ -637,6 +637,8 @@ function CasesPage() {
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
       ) : cases.map(c => {
         const ss = statusStyle[c.status] || { bg: '#1f2937', color: '#9ca3af' };
+        const isUuid = (s) => typeof s === 'string' && s.length === 36 && s[8] === '-';
+        const assignedLabel = c.assigned_to_name || (isUuid(c.assigned_to) ? c.assigned_to.slice(0, 8) + '…' : c.assigned_to);
         return (
           <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
@@ -645,11 +647,19 @@ function CasesPage() {
                   <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
                   <span style={{ fontSize: 14, color: '#e5e5e5' }}>{c.title}</span>
                 </div>
-                <div style={{ fontSize: 11, color: '#888', marginBottom: 6 }}>{c.customer_name || c.customer?.name || '-'}</div>
-                <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                  {c.assigned_to && <span>👤 {c.assigned_to}</span>}
-                  {c.scheduled_date && <span>📅 {fmtDate(c.scheduled_date)}</span>}
-                  {c.case_type && <span style={{ color: '#60a5fa' }}>{caseTypeLabel[c.case_type] || c.case_type.toUpperCase()}</span>}
+                <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{c.customer_name || c.customer?.name || '-'}</div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                  {c.case_type && (
+                    <span style={{ fontSize: 9, color: '#60a5fa', background: '#1e3a5f', padding: '2px 8px', borderRadius: 4, letterSpacing: 1, fontFamily: 'monospace' }}>
+                      {caseTypeLabel[c.case_type] || c.case_type.toUpperCase()}
+                    </span>
+                  )}
+                  {assignedLabel && (
+                    <span style={{ fontSize: 10, color: '#888', fontFamily: 'monospace' }}>👤 {assignedLabel}</span>
+                  )}
+                  {c.scheduled_date && (
+                    <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>📅 {fmtDate(c.scheduled_date)}</span>
+                  )}
                 </div>
               </div>
               <span style={{ padding: '3px 10px', borderRadius: 6, fontSize: 10, letterSpacing: 1, background: ss.bg, color: ss.color, fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
