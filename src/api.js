@@ -57,3 +57,6 @@ export const createUser = (data) => apiFetch('/users', { method: 'POST', body: J
 export const getCustomers = () => apiFetch('/customers');
 export const getContracts = () => apiFetch('/contracts');
 export const getCases = () => apiFetch('/cases');
+export const createCustomer = (data) => apiFetch('/customers', { method: 'POST', body: JSON.stringify(data) });
+export const createContract = (data) => apiFetch('/contracts', { method: 'POST', body: JSON.stringify(data) });
+export const createCase = (data) => apiFetch('/cases', { method: 'POST', body: JSON.stringify(data) });

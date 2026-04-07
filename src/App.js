@@ -496,11 +496,28 @@ function EmployeesPage() {
 function CustomersPage() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({ name: '', contact_person: '', phone: '', email: '' });
+  const [adding, setAdding] = useState(false);
+  const [msg, setMsg] = useState('');
 
-  useEffect(() => {
-    setLoading(true);
-    api.getCustomers().then(setCustomers).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+  const load = () => { setLoading(true); api.getCustomers().then(setCustomers).catch(() => {}).finally(() => setLoading(false)); };
+  useEffect(() => { load(); }, []);
+
+  const handleAdd = async () => {
+    if (!form.name) return setMsg('Sila isi Nama Syarikat.');
+    setAdding(true); setMsg('');
+    try {
+      await api.createCustomer(form);
+      setMsg('✓ Pelanggan berjaya ditambah');
+      setShowAdd(false);
+      setForm({ name: '', contact_person: '', phone: '', email: '' });
+      load();
+    } catch (err) { setMsg(err.message); }
+    finally { setAdding(false); }
+  };
+
+  const inp = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2a', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'monospace', fontSize: 13, boxSizing: 'border-box', outline: 'none' };
 
   return (
     <div>
@@ -509,10 +526,29 @@ function CustomersPage() {
           <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Pelanggan</div>
         </div>
-        <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
+        <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
           + Tambah Pelanggan
         </button>
       </div>
+
+      {showAdd && (
+        <Card style={{ marginBottom: 20, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 16, color: '#e0e0e0', marginBottom: 16 }}>Tambah Pelanggan Baru</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <input placeholder="Nama Syarikat *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inp} />
+            <input placeholder="Nama Kontak" value={form.contact_person} onChange={e => setForm({ ...form, contact_person: e.target.value })} style={inp} />
+            <input placeholder="Telefon" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} style={inp} />
+            <input placeholder="Emel" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={inp} />
+          </div>
+          {msg && <div style={{ fontSize: 11, fontFamily: 'monospace', color: msg.startsWith('✓') ? '#4ade80' : '#ef4444', marginBottom: 10 }}>{msg}</div>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={handleAdd} disabled={adding} style={{ flex: 1, padding: '12px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, cursor: 'pointer' }}>
+              {adding ? 'Menyimpan...' : 'Simpan'}
+            </button>
+            <button onClick={() => { setShowAdd(false); setMsg(''); }} style={{ padding: '12px 20px', borderRadius: 10, border: '1px solid #333', background: 'transparent', color: '#888', fontFamily: 'monospace', cursor: 'pointer' }}>Batal</button>
+          </div>
+        </Card>
+      )}
 
       {loading ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
@@ -540,12 +576,33 @@ function CustomersPage() {
 // ── Contracts Page ────────────────────────────────────────────────────────
 function ContractsPage() {
   const [contracts, setContracts] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({ contract_no: '', customer_id: '', contract_type: '', service_scope: '', start_date: '', end_date: '', amount: '' });
+  const [adding, setAdding] = useState(false);
+  const [msg, setMsg] = useState('');
 
+  const load = () => { setLoading(true); api.getContracts().then(setContracts).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => {
-    setLoading(true);
-    api.getContracts().then(setContracts).catch(() => {}).finally(() => setLoading(false));
+    load();
+    api.getCustomers().then(setCustomers).catch(() => {});
   }, []);
+
+  const handleAdd = async () => {
+    if (!form.contract_no) return setMsg('Sila isi No. Kontrak.');
+    setAdding(true); setMsg('');
+    try {
+      await api.createContract({ ...form, amount: form.amount ? parseFloat(form.amount) : undefined });
+      setMsg('✓ Kontrak berjaya ditambah');
+      setShowAdd(false);
+      setForm({ contract_no: '', customer_id: '', contract_type: '', service_scope: '', start_date: '', end_date: '', amount: '' });
+      load();
+    } catch (err) { setMsg(err.message); }
+    finally { setAdding(false); }
+  };
+
+  const inp = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2a', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'monospace', fontSize: 13, boxSizing: 'border-box', outline: 'none' };
 
   const statusStyle = {
     active:     { bg: '#166534', color: '#4ade80' },
@@ -563,10 +620,40 @@ function ContractsPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kontrak</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
+        <div>
+          <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kontrak</div>
+        </div>
+        <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
+          + Tambah Kontrak
+        </button>
       </div>
+
+      {showAdd && (
+        <Card style={{ marginBottom: 20, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 16, color: '#e0e0e0', marginBottom: 16 }}>Tambah Kontrak Baru</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <input placeholder="No. Kontrak *" value={form.contract_no} onChange={e => setForm({ ...form, contract_no: e.target.value })} style={inp} />
+            <select value={form.customer_id} onChange={e => setForm({ ...form, customer_id: e.target.value })} style={inp}>
+              <option value="">Pilih Pelanggan</option>
+              {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+            <input placeholder="Jenis Kontrak" value={form.contract_type} onChange={e => setForm({ ...form, contract_type: e.target.value })} style={inp} />
+            <input type="number" placeholder="Jumlah (RM)" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} style={inp} />
+            <input type="date" value={form.start_date} onChange={e => setForm({ ...form, start_date: e.target.value })} style={inp} />
+            <input type="date" value={form.end_date} onChange={e => setForm({ ...form, end_date: e.target.value })} style={inp} />
+            <textarea placeholder="Skop Servis" value={form.service_scope} onChange={e => setForm({ ...form, service_scope: e.target.value })} style={{ ...inp, gridColumn: '1 / -1', resize: 'vertical', minHeight: 80 }} />
+          </div>
+          {msg && <div style={{ fontSize: 11, fontFamily: 'monospace', color: msg.startsWith('✓') ? '#4ade80' : '#ef4444', marginBottom: 10 }}>{msg}</div>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={handleAdd} disabled={adding} style={{ flex: 1, padding: '12px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, cursor: 'pointer' }}>
+              {adding ? 'Menyimpan...' : 'Simpan'}
+            </button>
+            <button onClick={() => { setShowAdd(false); setMsg(''); }} style={{ padding: '12px 20px', borderRadius: 10, border: '1px solid #333', background: 'transparent', color: '#888', fontFamily: 'monospace', cursor: 'pointer' }}>Batal</button>
+          </div>
+        </Card>
+      )}
 
       {loading ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
@@ -603,12 +690,37 @@ function ContractsPage() {
 // ── Cases Page ────────────────────────────────────────────────────────────
 function CasesPage() {
   const [cases, setCases] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({ title: '', customer_id: '', case_type: 'maintenance', priority: 'normal', scheduled_date: '', problem_desc: '', assigned_to: '', contract_id: '' });
+  const [adding, setAdding] = useState(false);
+  const [msg, setMsg] = useState('');
 
+  const load = () => { setLoading(true); api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => {
-    setLoading(true);
-    api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false));
+    load();
+    api.getCustomers().then(setCustomers).catch(() => {});
+    api.getUsers().then(all => setTechnicians(all.filter(u => u.role === 'technician'))).catch(() => {});
+    api.getContracts().then(setContracts).catch(() => {});
   }, []);
+
+  const handleAdd = async () => {
+    if (!form.title) return setMsg('Sila isi Tajuk kes.');
+    setAdding(true); setMsg('');
+    try {
+      await api.createCase({ ...form, contract_id: form.contract_id || undefined, assigned_to: form.assigned_to || undefined });
+      setMsg('✓ Kes berjaya ditambah');
+      setShowAdd(false);
+      setForm({ title: '', customer_id: '', case_type: 'maintenance', priority: 'normal', scheduled_date: '', problem_desc: '', assigned_to: '', contract_id: '' });
+      load();
+    } catch (err) { setMsg(err.message); }
+    finally { setAdding(false); }
+  };
+
+  const inp = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #2a2a2a', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'monospace', fontSize: 13, boxSizing: 'border-box', outline: 'none' };
 
   const statusStyle = {
     open:        { bg: '#1e3a5f', color: '#60a5fa' },
@@ -626,10 +738,52 @@ function CasesPage() {
           <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
           <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kes Servis</div>
         </div>
-        <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
+        <button onClick={() => setShowAdd(!showAdd)} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
           + Tambah Kes
         </button>
       </div>
+
+      {showAdd && (
+        <Card style={{ marginBottom: 20, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 16, color: '#e0e0e0', marginBottom: 16 }}>Tambah Kes Servis Baru</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <input placeholder="Tajuk *" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={{ ...inp, gridColumn: '1 / -1' }} />
+            <select value={form.customer_id} onChange={e => setForm({ ...form, customer_id: e.target.value })} style={inp}>
+              <option value="">Pilih Pelanggan</option>
+              {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+            <select value={form.contract_id} onChange={e => setForm({ ...form, contract_id: e.target.value })} style={inp}>
+              <option value="">Kontrak (Pilihan)</option>
+              {contracts.map(c => <option key={c.id} value={c.id}>{c.contract_no}</option>)}
+            </select>
+            <select value={form.case_type} onChange={e => setForm({ ...form, case_type: e.target.value })} style={inp}>
+              <option value="maintenance">Penyelenggaraan</option>
+              <option value="repair">Pembaikan</option>
+              <option value="emergency">Kecemasan</option>
+              <option value="inspection">Pemeriksaan</option>
+            </select>
+            <select value={form.priority} onChange={e => setForm({ ...form, priority: e.target.value })} style={inp}>
+              <option value="low">Rendah</option>
+              <option value="normal">Normal</option>
+              <option value="high">Tinggi</option>
+              <option value="urgent">Urgent</option>
+            </select>
+            <input type="date" value={form.scheduled_date} onChange={e => setForm({ ...form, scheduled_date: e.target.value })} style={inp} />
+            <select value={form.assigned_to} onChange={e => setForm({ ...form, assigned_to: e.target.value })} style={inp}>
+              <option value="">Assign Kepada (Pilihan)</option>
+              {technicians.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+            </select>
+            <textarea placeholder="Penerangan Masalah" value={form.problem_desc} onChange={e => setForm({ ...form, problem_desc: e.target.value })} style={{ ...inp, gridColumn: '1 / -1', resize: 'vertical', minHeight: 80 }} />
+          </div>
+          {msg && <div style={{ fontSize: 11, fontFamily: 'monospace', color: msg.startsWith('✓') ? '#4ade80' : '#ef4444', marginBottom: 10 }}>{msg}</div>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={handleAdd} disabled={adding} style={{ flex: 1, padding: '12px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, cursor: 'pointer' }}>
+              {adding ? 'Menyimpan...' : 'Simpan'}
+            </button>
+            <button onClick={() => { setShowAdd(false); setMsg(''); }} style={{ padding: '12px 20px', borderRadius: 10, border: '1px solid #333', background: 'transparent', color: '#888', fontFamily: 'monospace', cursor: 'pointer' }}>Batal</button>
+          </div>
+        </Card>
+      )}
 
       {loading ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Memuatkan...</div>
