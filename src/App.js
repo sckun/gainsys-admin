@@ -507,7 +507,7 @@ function CustomersPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
           <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Pelanggan</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Pelanggan</div>
         </div>
         <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
           + Tambah Pelanggan
@@ -519,11 +519,11 @@ function CustomersPage() {
       ) : customers.length === 0 ? (
         <div style={{ color: '#555', fontFamily: 'monospace', fontSize: 12, textAlign: 'center', padding: 40 }}>Tiada data.</div>
       ) : customers.map(c => (
-        <Card key={c.id} style={{ marginBottom: 10 }}>
+        <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Avatar name={c.name} size={44} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, color: '#e0e0e0', marginBottom: 4 }}>{c.name}</div>
+              <div style={{ fontSize: 14, color: '#e5e5e5', marginBottom: 4 }}>{c.name}</div>
               <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>👤 {c.contact_person || '-'}</div>
               <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
                 <span>📞 {c.phone || '-'}</span>
@@ -547,7 +547,7 @@ function ContractsPage() {
     api.getContracts().then(setContracts).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const statusColor = { active: '#4ade80', expired: '#ef4444', pending: '#facc15' };
+  const statusColor = { active: '#4ade80', expired: '#f87171', pending: '#fbbf24' };
   const statusLabel = { active: 'AKTIF', expired: 'TAMAT', pending: 'PENDING' };
 
   const isExpiringSoon = (endDate) => {
@@ -560,7 +560,7 @@ function ContractsPage() {
     <div>
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Kontrak</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kontrak</div>
       </div>
 
       {loading ? (
@@ -571,12 +571,12 @@ function ContractsPage() {
         const color = statusColor[c.status] || '#888';
         const expiring = isExpiringSoon(c.end_date);
         return (
-          <Card key={c.id} style={{ marginBottom: 10, borderColor: expiring ? '#facc1544' : '#1e1e1e' }}>
+          <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: expiring ? '#fbbf2466' : '#2a2a2a' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 14, color: '#e0e0e0', fontFamily: 'monospace' }}>{c.contract_no}</span>
-                  {expiring && <span style={{ fontSize: 9, color: '#facc15', background: '#facc1520', padding: '2px 8px', borderRadius: 100, letterSpacing: 1 }}>⚠ HAMPIR TAMAT</span>}
+                  <span style={{ fontSize: 14, color: '#e5e5e5', fontFamily: 'monospace' }}>{c.contract_no}</span>
+                  {expiring && <span style={{ fontSize: 9, color: '#fbbf24', background: '#fbbf2420', padding: '2px 8px', borderRadius: 100, letterSpacing: 1 }}>⚠ HAMPIR TAMAT</span>}
                 </div>
                 <div style={{ fontSize: 12, color: '#888' }}>{c.customer_name || c.customer?.name || '-'}</div>
               </div>
@@ -605,7 +605,7 @@ function CasesPage() {
     api.getCases().then(setCases).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const statusColor = { open: '#60a5fa', in_progress: '#facc15', completed: '#4ade80', cancelled: '#555' };
+  const statusColor = { open: '#60a5fa', in_progress: '#fbbf24', completed: '#4ade80', cancelled: '#888' };
   const statusLabel = { open: 'BUKA', in_progress: 'DALAM PROSES', completed: 'SELESAI', cancelled: 'BATAL' };
 
   return (
@@ -613,7 +613,7 @@ function CasesPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
         <div>
           <div style={{ fontSize: 10, color: '#555', letterSpacing: 3, marginBottom: 4 }}>SERVIS</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#e0e0e0' }}>Kes Servis</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 28, color: '#ffffff' }}>Kes Servis</div>
         </div>
         <button onClick={() => alert('Coming soon')} style={{ padding: '10px 20px', borderRadius: 10, border: 'none', background: '#4ade80', color: '#0a0a0a', fontFamily: 'monospace', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}>
           + Tambah Kes
@@ -627,12 +627,12 @@ function CasesPage() {
       ) : cases.map(c => {
         const color = statusColor[c.status] || '#888';
         return (
-          <Card key={c.id} style={{ marginBottom: 10 }}>
+          <Card key={c.id} style={{ marginBottom: 10, background: '#1a1a1a', borderColor: '#2a2a2a' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
                   <span style={{ fontSize: 10, color: '#555', fontFamily: 'monospace' }}>{c.case_no}</span>
-                  <span style={{ fontSize: 14, color: '#e0e0e0' }}>{c.title}</span>
+                  <span style={{ fontSize: 14, color: '#e5e5e5' }}>{c.title}</span>
                 </div>
                 <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>{c.customer_name || c.customer?.name || '-'}</div>
                 <div style={{ fontSize: 10, color: '#555', display: 'flex', gap: 16 }}>
